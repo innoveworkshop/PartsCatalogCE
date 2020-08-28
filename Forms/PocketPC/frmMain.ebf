@@ -1,0 +1,146 @@
+VERSION 5.00
+Begin VB.Form frmMain 
+   Appearance      =   0  'Flat
+   BackColor       =   &H80000005&
+   Caption         =   "Parts Catalogger"
+   ClientHeight    =   3960
+   ClientLeft      =   60
+   ClientTop       =   840
+   ClientWidth     =   3615
+   ForeColor       =   &H80000008&
+   ScaleHeight     =   3960
+   ScaleWidth      =   3615
+   ShowOK          =   -1  'True
+   Begin VBCE.ListBox lstComponents 
+      Height          =   2955
+      Left            =   120
+      TabIndex        =   2
+      Top             =   840
+      Width           =   3375
+      List            =   "frmMain.frx":0000
+      ItemData        =   "frmMain.frx":0028
+      _cx             =   5953
+      _cy             =   5212
+      BackColor       =   -2147483643
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483640
+      Columns         =   0
+      IntegralHeight  =   -1  'True
+      MultiSelect     =   0
+      Sorted          =   0   'False
+   End
+   Begin VBCE.ComboBox cmbSubCategories 
+      Height          =   300
+      Left            =   120
+      TabIndex        =   1
+      Top             =   480
+      Width           =   3375
+      List            =   "frmMain.frx":0050
+      ItemData        =   "frmMain.frx":0078
+      _cx             =   5953
+      _cy             =   529
+      BackColor       =   -2147483643
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483640
+      Text            =   "Sub-Categories"
+      IntegralHeight  =   -1  'True
+      Locked          =   0   'False
+      Sorted          =   0   'False
+      Style           =   0
+   End
+   Begin VBCE.ComboBox cmbCategories 
+      Height          =   300
+      Left            =   120
+      TabIndex        =   0
+      Top             =   120
+      Width           =   3375
+      List            =   "frmMain.frx":00A0
+      ItemData        =   "frmMain.frx":00C8
+      _cx             =   5953
+      _cy             =   529
+      BackColor       =   -2147483643
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483640
+      Text            =   "Categories"
+      IntegralHeight  =   -1  'True
+      Locked          =   0   'False
+      Sorted          =   0   'False
+      Style           =   0
+   End
+End
+Attribute VB_Name = "frmMain"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+''' frmMain (Pocket PC)
+''' Application's main form for Pocket PCs.
+'''
+''' Author: Nathan Campos <nathan@innoveworkshop.com>
+
+Option Explicit
+
+' Category selection changed by the program.
+Private Sub cmbCategories_Change()
+    cmbCategories_Click
+End Sub
+
+' Category selection changed.
+Private Sub cmbCategories_Click()
+    LoadSubCategories cmbCategories.ItemData(cmbCategories.ListIndex), _
+        cmbSubCategories, True
+    cmbSubCategories.ListIndex = 0
+End Sub
+
+' Sub-category selection changed by the program.
+Private Sub cmbSubCategories_Change()
+    cmbSubCategories_Click
+End Sub
+
+' Sub-category selection changed.
+Private Sub cmbSubCategories_Click()
+    LoadComponents cmbCategories.ItemData(cmbCategories.ListIndex), _
+        cmbSubCategories.ItemData(cmbSubCategories.ListIndex), lstComponents, True
+End Sub
+
+' Form just loaded.
+Private Sub Form_Load()
+    ' Set the database path.
+    SetDatabasePath "\PartCat\PartCat.cdb"
+    
+    ' Load categories.
+    LoadCategories cmbCategories, True
+    cmbCategories.ListIndex = 0
+End Sub
+
+' User clicked the OK button of the dialog.
+Private Sub Form_OKClick()
+    App.End
+End Sub

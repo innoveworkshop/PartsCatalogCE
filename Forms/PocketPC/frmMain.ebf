@@ -1,5 +1,6 @@
 VERSION 5.00
 Object = "{F7DEA2C9-BA8F-446E-A292-B4840F3BD661}#1.0#0"; "mscemenubar.dll"
+Object = "{25C953A7-5464-11D1-A714-00AA0044064C}#1.0#0"; "MSCEFILE.DLL"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BackColor       =   &H80000005&
@@ -12,6 +13,12 @@ Begin VB.Form frmMain
    ScaleHeight     =   3960
    ScaleWidth      =   3615
    ShowOK          =   -1  'True
+   Begin FILECTLCtl.FileSystem fsMain 
+      Left            =   1920
+      Top             =   2040
+      _cx             =   2200
+      _cy             =   1400
+   End
    Begin MenuBarLib.MenuBar mnbMenuBar 
       Left            =   240
       Top             =   3120
@@ -118,22 +125,22 @@ Option Explicit
 
 ' Category selection changed by the program.
 Private Sub cmbCategories_Change()
-    CategorySelectionChange cmbCategories, cmbSubCategories
+    CategorySelectionChange cmbCategories, cmbSubCategories, True
 End Sub
 
 ' Category selection changed.
 Private Sub cmbCategories_Click()
-    CategorySelectionChange cmbCategories, cmbSubCategories
+    CategorySelectionChange cmbCategories, cmbSubCategories, True
 End Sub
 
 ' Sub-category selection changed by the program.
 Private Sub cmbSubCategories_Change()
-    SubCategorySelectionChange cmbCategories, cmbSubCategories, lstComponents
+    SubCategorySelectionChange cmbCategories, cmbSubCategories, lstComponents, True
 End Sub
 
 ' Sub-category selection changed.
 Private Sub cmbSubCategories_Click()
-    SubCategorySelectionChange cmbCategories, cmbSubCategories, lstComponents
+    SubCategorySelectionChange cmbCategories, cmbSubCategories, lstComponents, True
 End Sub
 
 ' Form just loaded.

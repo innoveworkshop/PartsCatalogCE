@@ -4,17 +4,15 @@ Object = "{338D5EA5-4BBD-11D1-9A7D-00C04FAD5AEC}#1.0#0"; "mscepicture.dll"
 Begin VB.Form frmComponent 
    Appearance      =   0  'Flat
    BackColor       =   &H80000005&
-   BorderStyle     =   0  'None
    Caption         =   "Component"
    ClientHeight    =   4065
-   ClientLeft      =   0
-   ClientTop       =   0
+   ClientLeft      =   60
+   ClientTop       =   345
    ClientWidth     =   3615
    ForeColor       =   &H80000008&
    ScaleHeight     =   4065
    ScaleWidth      =   3615
    ShowOK          =   -1  'True
-   SIPBehavior     =   1  'vbSIPAutomatic
    Begin GRIDLibCtl.GridCtrl grdProperties 
       Height          =   1215
       Left            =   1440
@@ -39,8 +37,8 @@ Begin VB.Form frmComponent
       RowHeightMin    =   0
       Rows            =   2
       ScrollBars      =   3
-      ScrollTrack     =   0   'False
-      SelectionMode   =   0
+      ScrollTrack     =   -1  'True
+      SelectionMode   =   1
       TextStyle       =   0
       WordWrap        =   0   'False
       Enabled         =   -1  'True
@@ -107,9 +105,9 @@ Begin VB.Form frmComponent
       HideSelection   =   -1  'True
       Locked          =   0   'False
       MaxLength       =   0
-      MultiLine       =   0   'False
+      MultiLine       =   -1  'True
       PasswordChar    =   ""
-      ScrollBars      =   0
+      ScrollBars      =   2
    End
    Begin VBCE.Label Label6 
       Height          =   255
@@ -429,7 +427,45 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+''' frmComponent
+''' Displays a component to the user.
+'''
+''' Author: Nathan Campos <nathan@innoveworkshop.com>
+
 Option Explicit
+
+' Private variables.
+Private m_lngID As Long
+Private m_strOriginalName As String
+Private m_blnIsNewComponent As Boolean
+
+' Shows a component.
+Public Sub LoadComponent(lngID As Long, rs As ADOCE.Recordset)
+    ' Set the current ID.
+    m_lngID = lngID
+    m_blnIsNewComponent = False
+    
+    ' Clear all the controls and populate the view.
+    ClearControls
+    PopulateComponentView rs, txtName, txtQuantity, cmbCategory, cmbSubCategory, _
+        cmbPackage, txtNotes, grdProperties
+    ShowImage
+End Sub
+
+' Shows the component image.
+Private Sub ShowImage()
+    Dim strImage As String
+    
+    ' Get component image.
+    strImage = GetComponentImagePath(m_strOriginalName, cmbPackage.Text, True)
+    
+    ' Set the component image.
+    If strImage <> vbNullString Then
+        picImage.DrawPicture strImage, 0, 0, picImage.ScaleWidth, picImage.ScaleHeight
+    Else
+        picImage.Cls
+    End If
+End Sub
 
 ' Clear up the form for a new component.
 Private Sub ClearControls()
@@ -442,17 +478,42 @@ Private Sub ClearControls()
     cmbCategory.Clear
     cmbSubCategory.Clear
     cmbPackage.Clear
-
+    
     ' Special controls.
-    grdProperties.Clear
+    ClearPropertiesGrid
     picImage.Cls
+End Sub
+
+' Setup the properties grid.
+Private Sub ClearPropertiesGrid()
+    ' Clear stuff up.
+    grdProperties.Clear
+    grdProperties.Rows = 2
+    
+    ' Setup header row.
+    grdProperties.TextMatrix(0, 0) = "Property"
+    grdProperties.ColAlignment(0) = flexAlignLeftCenter
+    grdProperties.ColAlignment(1) = flexAlignLeftCenter
+    grdProperties.TextMatrix(0, 1) = "Value"
+End Sub
+
+' Sets the component's original name.
+Public Sub SetOriginalName(strName As String)
+    m_strOriginalName = strName
+End Sub
+
+' Category selection changed by the program.
+Private Sub cmbCategory_Change()
+    CategorySelectionChange cmbCategory, cmbSubCategory, m_blnIsNewComponent
+End Sub
+
+' Category selection changed.
+Private Sub cmbCategory_Click()
+    CategorySelectionChange cmbCategory, cmbSubCategory, m_blnIsNewComponent
 End Sub
 
 ' Form just loaded up.
 Private Sub Form_Load()
-    ' Clear all the controls.
-    ClearControls
-    
     ' Set focus on the picture to hide the SIP.
     picImage.SetFocus
 End Sub
@@ -461,4 +522,9 @@ End Sub
 Private Sub Form_OKClick()
     Me.Hide
     frmMain.Show
+End Sub
+
+' Component name changed.
+Private Sub txtName_Change()
+    Me.Caption = txtName.Text
 End Sub

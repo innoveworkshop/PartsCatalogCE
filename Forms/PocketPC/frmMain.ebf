@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{F7DEA2C9-BA8F-446E-A292-B4840F3BD661}#1.0#0"; "mscemenubar.dll"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BackColor       =   &H80000005&
@@ -11,6 +12,14 @@ Begin VB.Form frmMain
    ScaleHeight     =   3960
    ScaleWidth      =   3615
    ShowOK          =   -1  'True
+   Begin MenuBarLib.MenuBar mnbMenuBar 
+      Left            =   240
+      Top             =   3120
+      _cx             =   1296
+      _cy             =   1085
+      Enabled         =   -1  'True
+      NewButton       =   0   'False
+   End
    Begin VBCE.ListBox lstComponents 
       Height          =   2955
       Left            =   120
@@ -143,4 +152,9 @@ End Sub
 ' User clicked the OK button of the dialog.
 Private Sub Form_OKClick()
     App.End
+End Sub
+
+' A component was selected.
+Private Sub lstComponents_Click()
+    frmComponent.Show
 End Sub

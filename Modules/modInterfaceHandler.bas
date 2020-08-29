@@ -101,9 +101,9 @@ Public Sub PopulateComponentView(rs As ADOCE.Recordset, txtName As TextBox, _
     If Not IsNull(rs.Fields("Properties")) Then
         PopulatePropertiesGrid grdProperties, rs.Fields("Properties")
     Else
-        grdProperties.Rows = 2
-        grdProperties.TextMatrix(1, 0) = ""
-        grdProperties.TextMatrix(1, 1) = ""
+        grdProperties.Rows = 1
+        grdProperties.TextMatrix(0, 0) = ""
+        grdProperties.TextMatrix(0, 1) = ""
     End If
 End Sub
 
@@ -115,9 +115,9 @@ Public Sub PopulatePropertiesGrid(grdProperties As GridCtrl, strProperties As St
     ' Split the properties and preparate the grid for the properties.
     astrProperties = Split(strProperties, vbTab)
     If UBound(astrProperties) = 0 Then
-        grdProperties.Rows = UBound(astrProperties) + 2
+        grdProperties.Rows = UBound(astrProperties) + 1
     Else
-        grdProperties.Rows = UBound(astrProperties) + 3
+        grdProperties.Rows = UBound(astrProperties) + 2
     End If
     
     ' Populate the properties.
@@ -126,11 +126,11 @@ Public Sub PopulatePropertiesGrid(grdProperties As GridCtrl, strProperties As St
         ' Check if the property is populated.
         If astrProperties(intIndex) <> "" Then
             astrKeyValue = Split(astrProperties(intIndex), ": ")
-            grdProperties.TextMatrix(intIndex + 1, 0) = astrKeyValue(0)
-            grdProperties.TextMatrix(intIndex + 1, 1) = astrKeyValue(1)
+            grdProperties.TextMatrix(intIndex, 0) = astrKeyValue(0)
+            grdProperties.TextMatrix(intIndex, 1) = astrKeyValue(1)
         Else
-            grdProperties.TextMatrix(1, 0) = ""
-            grdProperties.TextMatrix(1, 1) = ""
+            grdProperties.TextMatrix(0, 0) = ""
+            grdProperties.TextMatrix(0, 1) = ""
         End If
     Next intIndex
 End Sub

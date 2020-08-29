@@ -17,6 +17,7 @@ Module=modDatabaseHandler; Modules\modDatabaseHandler.bas
 Form=Forms\PocketPC\frmComponent.ebf
 Module=modInterfaceHandler; Modules\modInterfaceHandler.bas
 Module=modAssetsHandler; Modules\modAssetsHandler.bas
+Object={01FC4473-8DE5-11D1-91B7-00C04FA87A04}#1.0#0; mscetabstrip.dll
 IconForm="frmMain"
 Startup="frmMain"
 HelpFile=""

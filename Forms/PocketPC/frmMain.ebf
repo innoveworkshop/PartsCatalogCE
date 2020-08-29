@@ -118,25 +118,22 @@ Option Explicit
 
 ' Category selection changed by the program.
 Private Sub cmbCategories_Change()
-    cmbCategories_Click
+    CategorySelectionChange cmbCategories, cmbSubCategories
 End Sub
 
 ' Category selection changed.
 Private Sub cmbCategories_Click()
-    LoadSubCategories cmbCategories.ItemData(cmbCategories.ListIndex), _
-        cmbSubCategories, True
-    cmbSubCategories.ListIndex = 0
+    CategorySelectionChange cmbCategories, cmbSubCategories
 End Sub
 
 ' Sub-category selection changed by the program.
 Private Sub cmbSubCategories_Change()
-    cmbSubCategories_Click
+    SubCategorySelectionChange cmbCategories, cmbSubCategories, lstComponents
 End Sub
 
 ' Sub-category selection changed.
 Private Sub cmbSubCategories_Click()
-    LoadComponents cmbCategories.ItemData(cmbCategories.ListIndex), _
-        cmbSubCategories.ItemData(cmbSubCategories.ListIndex), lstComponents, True
+    SubCategorySelectionChange cmbCategories, cmbSubCategories, lstComponents
 End Sub
 
 ' Form just loaded.
@@ -156,5 +153,5 @@ End Sub
 
 ' A component was selected.
 Private Sub lstComponents_Click()
-    frmComponent.Show
+    ComponentSelectionChange lstComponents
 End Sub
